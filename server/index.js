@@ -40,15 +40,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  // 채팅 기능 맛보기 📝
-  socket.on('sendText', ({ senderName, receiverName, text }) => {
-    const receiver = getUser(receiverName);
-    io.to(receiver?.socketId).emit('getText', {
-      senderName,
-      text,
-    });
-  });
-
   socket.on('disconnect', () => {
     removeUser(socket.id);
   });

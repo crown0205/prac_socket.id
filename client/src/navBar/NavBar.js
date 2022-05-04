@@ -16,44 +16,32 @@ const NavBar = ({ socket }) => {
       // 알림 내부에서 이전 개체를 가져올수 있어서 이렇게 사용한다.
       setNotifications((prev) => [...prev, data]);
     });
-
-    // 채팅 맛보기 📝
-    socket.on('getText', (data) => {
-      // 이렇게 하면 종속성에 관해서 잘못하면 무한루프에 빠질수도 있어서... 방지 하기 위해 스프레드를 사용하지 않고,
-      // setNotification((prev) => [...notification, data])
-
-      // 알림 내부에서 이전 개체를 가져올수 있어서 이렇게 사용한다.
-      setNotifications((prev) => [...prev, data]);
-    });
   }, [socket]);
 
   // ==>  알림 기능 ⭐️
   //  버튼을 누르면 타입에 맡게 action이 발생된다.
   // 구조분해로 바로 쓸 값을 나눔
-  // const displayNotifications = ({ senderName, type }) => {
-  //   let action;
-
-  //   if (type === 1) {
-  //     action = 'liked';
-  //   } else if (type === 2) {
-  //     action = 'commented';
-  //   } else {
-  //     action = 'shared';
-  //   }
-  //   return (
-  //     <span className="notification">{`${senderName} ${action} your post`}</span>
-  //   );
-  // };
-
-  // ==> 채팅 📝
-  const displayNotifications = ({ senderName, text }) => {
+  const displayNotifications = ({ senderName, type, idx }) => {
     let action;
 
-    return <span className="notification">{`${senderName} : ${text}`}</span>;
+    if (type === 1) {
+      action = 'liked';
+    } else if (type === 2) {
+      action = 'commented';
+    } else {
+      action = 'shared';
+    }
+    return (
+      <span
+        className="notification"
+        key={`notification${idx}`}
+      >{`${senderName} ${action} your post`}</span>
+    );
   };
 
   const handleRead = () => {
     setNotifications([]);
+
     setOpen(false);
   };
 
@@ -82,7 +70,9 @@ const NavBar = ({ socket }) => {
       </div>
       {open && (
         <div className="notifications">
-          {notifications.map((item) => displayNotifications(item))}
+          {notifications.map((item, idx) =>
+            displayNotifications({ item, idx }),
+          )}
           <button className="nBtn" onClick={handleRead}>
             Mark as read
           </button>

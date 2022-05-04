@@ -10,30 +10,19 @@ const Card = ({ post, socket, user }) => {
   console.log(liked);
 
   //   // 알림 기능 ⭐️
-  // const handleNotification = (type) => {
-  //   setLiked(true);
-  //   // setLiked(!liked);
-
-  //   socket.emit('sendNotification', {
-  //     // 이벤트를 보내는 유저
-  //     senderName: user,
-  //     // 이벤트를 받는 유저
-  //     receiverName: post.userName,
-  //     type,
-  //   });
-  // };
-
-  // 채팅 맛보기 📝
   const handleNotification = (type) => {
-    type === 1 && setLiked(true);
-    socket.emit('sendText', {
+    setLiked(true);
+    // setLiked(!liked);
+
+    socket.emit('sendNotification', {
       // 이벤트를 보내는 유저
       senderName: user,
       // 이벤트를 받는 유저
       receiverName: post.userName,
-      text: '안녕 이건 채팅 맛보기임.',
+      type,
     });
   };
+
   return (
     <div className="crad">
       <div className="info">
